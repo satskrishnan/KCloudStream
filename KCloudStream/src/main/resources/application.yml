@@ -1,0 +1,42 @@
+spring.output.ansi.enabled: always
+spring.main.lazy-initialization: true
+spring.cloud.function.scan.packages: com.infy.ev.digital.functions
+
+server:
+  port: 8181
+spring:
+  cloud:
+    stream:
+      default-binder: kafka
+      kafka:
+        binder:
+          headers:
+          - type
+          brokers:
+          - localhost:9092
+      bindings:
+        input:
+         binder: kafka
+         destination: test-in
+         content-type: application/json
+         group: input-group-1  
+         consumer:
+            header-mode: headers      
+        output_1:
+          binder: kafka
+          destination: test-in
+          group: output-group-1
+          content-type: application/json
+          producer:
+            header-mode: headers
+        output_2:
+          binder: kafka
+          destination: test-out
+          group: output-group-2
+          content-type: application/json
+          producer:
+            header-mode: headers
+#Enable logging to debug for spring kafka config
+logging:
+  level:
+    org.springframework.kafka.config: debug
